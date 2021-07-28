@@ -71,17 +71,33 @@ export function TeamsList() {
   // Order teams by score (highest to lowest)
   function orderTeamByScoreHighestToLowest() {
     // Write your code here
+    const highestToLowest = TEAMS
+      .map((team) => ({
+        ...team,
+        totalScore: team.games.reduce((acc, game) => acc + game.score, 0),
+      }))
+      .sort((a, b) => b.totalScore - a.totalScore);
+
+    setTeams(highestToLowest);
   }
 
   // Order teams by score (lowest to highest)
   function orderTeamByScoreLowestToHighest() {
     // Write your code here
+    const lowestToHighest = TEAMS
+      .map((team) => ({
+        ...team,
+        totalScore: team.games.reduce((acc, game) => acc + game.score, 0),
+      }))
+      .sort((a, b) => a.totalScore - b.totalScore);
+
+    setTeams(lowestToHighest);
   }
 
   // Filtering teams that with at least 3 players
   function teamsWithMoreThanThreePlayers() {
     // Write your code here
-    const filteredTeams = teams.filter((team) => team.players.length > 2);
+    const filteredTeams = TEAMS.filter((team) => team.players.length > 2);
     setTeams(filteredTeams);
   }
 
@@ -89,8 +105,10 @@ export function TeamsList() {
     <div>
       <button onClick={() => setTeams(TEAMS)}>Initial list</button>
 
-      <button>Highest to Lowest</button>
-      <button>Lowest to Highest</button>
+      <button onClick={orderTeamByScoreHighestToLowest}>
+        Highest to Lowest
+      </button>
+      <button onClick={orderTeamByScoreLowestToHighest}>Lowest to Highest</button>
       <button onClick={teamsWithMoreThanThreePlayers}>
         Teams with at least 3 players
       </button>
@@ -98,7 +116,14 @@ export function TeamsList() {
       <ul className="teams">
         {/** Render the list of teams */}
         {teams.map((team, index) => (
-          <li key={index}>{team.name}</li>
+          <li key={index}>
+            <p>Team name: {team.name}</p>
+            <p>Player’s quantity: {team.players.length}</p>
+            <p>
+              Total score:{" "}
+              {team.games.reduce((acc, game) => acc + game.score, 0)}
+            </p>
+          </li>
         ))}
       </ul>
     </div>
